@@ -49,14 +49,26 @@ const Statistics = (props) => {
   }
   return (<>
     <Header text="statistics" />
-    <p>{props.goodName} {props.goodCount}</p>
-    <p>{props.neutralName} {props.neutralCount}</p>
-    <p>{props.badName} {props.badCount}</p>
-    <p>{props.allName} {props.allCount}</p>
-    <p>{props.avgName} {props.avgCount}</p>
-    <p>{props.posName} {props.postPerc}</p>
+    <table>
+      <tbody>
+        <StatisticsLine text={props.goodName} value={props.goodCount} />
+        <StatisticsLine text={props.neutralName} value={props.neutralCount} />
+        <StatisticsLine text={props.badName} value={props.badCount} />
+        <StatisticsLine text={props.allName} value={props.allCount} />
+        <StatisticsLine text={props.avgName} value={props.avgCount} />
+        <StatisticsLine text={props.posName} value={props.posPerc} />
+      </tbody>
+    </table>
   </>
   )
 }
+
+const StatisticsLine = (props) => (
+  <tr>
+    <td>{props.text}</td>
+    <td>{props.value}</td>
+  </tr>
+)
+
 
 export default App;
