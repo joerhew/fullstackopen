@@ -38,8 +38,16 @@ const Header = (props) => (
   </>
 )
 
-const Statistics = (props) => (
-  <>
+const Statistics = (props) => {
+  if (props.allCount === 0) {
+    return (
+      <>
+        <Header text="statistics" />
+        <p>No feedback given</p>  
+      </>
+    )
+  }
+  return (<>
     <Header text="statistics" />
     <p>{props.goodName} {props.goodCount}</p>
     <p>{props.neutralName} {props.neutralCount}</p>
@@ -48,6 +56,7 @@ const Statistics = (props) => (
     <p>{props.avgName} {props.avgCount}</p>
     <p>{props.posName} {props.postPerc}</p>
   </>
-)
+  )
+}
 
 export default App;
