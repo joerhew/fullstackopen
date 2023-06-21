@@ -20,14 +20,7 @@ const App = () => {
       <Button text="good" handleClick={handleGoodClick}/>
       <Button text="neutral" handleClick={handleNeutralClick}/>
       <Button text="bad" handleClick={handleBadClick}/>
-      <Header text="statistics" />
-      <Stat />
-      <Stat name="good" count={good} />
-      <Stat name="neutral" count={neutral} />
-      <Stat name="bad" count={bad} />
-      <Stat name="all" count={all} />
-      <Stat name="average" count={avg} />
-      <Stat name="positive" count={pos + '%'} />
+      <Statistics goodName="good" goodCount={good} neutralName="neutral" neutralCount={neutral} badName="bad" badCount={bad} allName="all" allCount={all} avgName="average" avgCount={avg} posName="positive" posPerc={pos + '%'} />
 
     </div>
   )
@@ -45,9 +38,15 @@ const Header = (props) => (
   </>
 )
 
-const Stat = (props) => (
+const Statistics = (props) => (
   <>
-    <p>{props.name} {props.count}</p>
+    <Header text="statistics" />
+    <p>{props.goodName} {props.goodCount}</p>
+    <p>{props.neutralName} {props.neutralCount}</p>
+    <p>{props.badName} {props.badCount}</p>
+    <p>{props.allName} {props.allCount}</p>
+    <p>{props.avgName} {props.avgCount}</p>
+    <p>{props.posName} {props.postPerc}</p>
   </>
 )
 
