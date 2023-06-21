@@ -22,6 +22,7 @@ const App = () => {
   
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(createInitialArray);
+  const [mostVotedPosition, setPosition] = useState();
   
   const RandomAnecdote = () => {
     let min = 0;
@@ -35,18 +36,29 @@ const App = () => {
   const vote = () => {
     copy[selected] += 1;
     setVotes(copy);
+    let index = copy.indexOf(Math.max(...copy));
+    setPosition(index);
   }
 
   return (
     <div>
+      <Header text="Anecdote of the day" />
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <br />
       <Button handleClick={vote} name='vote' />
       <Button handleClick={RandomAnecdote} name='next anecdote' />
+      <Header text="Anecdote with the most votes" />
+      <p>{anecdotes[mostVotedPosition]}</p>
     </div>
   )
 }
+
+const Header = (props) => (
+  <>
+    <h1>{props.text}</h1>
+  </>
+)
 
 const Button = (props) => (
   <>
