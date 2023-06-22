@@ -1,22 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import Search from './components/Search';
 import AddNewPersonForm from './components/AddNewPersonForm';
 import Persons from './components/Persons';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '416 123 4567' }
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [searchName, setSearchName] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log(response.data);
+        setPersons(response.data);
+      })
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault();
     if (persons.some(person => person.name === newName)) { //If the person's name is already in the phonebook
       alert(`${newName} is already added to phonebook`); //Alert
     } else {
-      setPersons(persons.concat({name: newName, phone: newPhone})); //Add new person
+      setPersons(persons.concat({name: newName, number: newPhone})); //Add new person
       setNewName(''); //Set name input to blank
       setNewPhone(''); //Set phone input to blank
       setSearchName(''); //Set search input to blank
