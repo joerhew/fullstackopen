@@ -3,13 +3,15 @@ import { useState, useEffect } from 'react';
 import Search from './components/Search';
 import AddNewPersonForm from './components/AddNewPersonForm';
 import Persons from './components/Persons';
-import personServices from './services/person'
+import personServices from './services/person';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [searchName, setSearchName] = useState('');
+  const [message, setMessage] = useState({ text: null, type: null });
 
   useEffect(() => {
     personServices
@@ -32,6 +34,10 @@ const App = () => {
           .then(returnedPerson => {
             console.log(returnedPerson)
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson));
+            setMessage({text: `Updated ${returnedPerson.name}'s phone number to ${returnedPerson.number}.`, type: 'success' }) //Set notification message    
+          })
+          .catch(() => {
+            setMessage({text: `Error: ${personToUpdate.name} has already been deleted.`, type: 'error'}) //Set notification message
           });
       }
     } else {
@@ -41,7 +47,8 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName(''); //Set name input to blank
           setNewPhone(''); //Set phone input to blank
-          setSearchName(''); //Set search input to blank    
+          setSearchName(''); //Set search input to blank
+          setMessage({text: `Added ${returnedPerson.name} to the phonebook.`, type: 'success' }) //Set notification message    
         })
     };
   }
@@ -73,6 +80,10 @@ const App = () => {
         .remove(event.target.id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== idToDelete));
+          setMessage({text: `Deleted ${nameToDelete} from the phonebook.`, type: 'success'}) //Set notification message
+        })
+        .catch(() => {
+          setMessage({text: `Error: ${nameToDelete} has already been deleted.`, type: 'error'}) //Set notification message
         })
     }
   }
@@ -80,6 +91,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message.text} type={message.type} />
       <Search searchName={searchName} typeSearchName={typeSearchName} />
       <h2>Add a new person</h2>
       <AddNewPersonForm addPerson={addPerson} newName={newName} typeNewName={typeNewName} newPhone={newPhone} typeNewPhone={typeNewPhone} />
