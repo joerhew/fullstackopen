@@ -6,6 +6,7 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
+  const [searchName, setSearchName] = useState('');
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -15,6 +16,7 @@ const App = () => {
       setPersons(persons.concat({name: newName, phone: newPhone})); //Add new person
       setNewName(''); //Set name input to blank
       setNewPhone(''); //Set phone input to blank
+      setSearchName(''); //Set search input to blank
     };
   }
 
@@ -28,20 +30,34 @@ const App = () => {
     setNewPhone(event.target.value);
   }
 
+  const typeSearchName = (event) => {
+    console.log('typing: ', event.target.value);
+    setSearchName(event.target.value);
+  }
+
+  const PersonsToShow = searchName
+    ? persons.filter((person) => person.name.toLowerCase().includes(searchName.toLowerCase()))
+    : persons;
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        search by name: <input value={searchName} onChange={typeSearchName}/>
+      </div>
+      <h2>Add a new person</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={typeNewName}/>
-          name: <input value={newPhone} onChange={typeNewPhone}/>
+          <br />
+          number: <input value={newPhone} onChange={typeNewPhone}/>
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <Persons persons={persons}/>
+      <Persons persons={PersonsToShow}/>
     </div>
   )
 }
