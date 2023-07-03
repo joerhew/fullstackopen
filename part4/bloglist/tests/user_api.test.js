@@ -15,16 +15,6 @@ beforeEach(async () => {
   await user.save();
 })
 
-/*
-user name
-  minLength: 3,
-  required: true,
-  unique: true
-password
-  length: 3
-either username or password is missing
-*/
-
 describe('creating a new user', () => {
   test('creating a user without a username returns status code 400 and an appropriate error message', async () => {
     const userNoUsername = {
@@ -67,7 +57,7 @@ describe('creating a new user', () => {
       .send(userShortUsername)
       .expect(400)
       .expect(response => {
-        expect(response.body.error).toBe('user validation failed: username: Path `username` (`ca`) is shorter than the minimum allowed length (3).');
+        expect(response.body.error).toBe('User validation failed: username: Path `username` (`ca`) is shorter than the minimum allowed length (3).');
       })
   })
 
@@ -116,7 +106,7 @@ describe('creating a new user', () => {
       .send(nonUniqueUser)
       .expect(400)
       .expect(response => {
-        expect(response.body.error).toBe('user validation failed: username: Error, expected `username` to be unique. Value: `root`');
+        expect(response.body.error).toBe('User validation failed: username: Error, expected `username` to be unique. Value: `root`');
       })
   })
 })

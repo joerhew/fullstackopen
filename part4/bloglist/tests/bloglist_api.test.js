@@ -3,16 +3,24 @@ const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
 const helper = require('./test_helper');
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
 const api = supertest(app);
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
 
   const blogObjects = helper.initialBlogs
     .map(blog => new Blog(blog));
   const promiseArray = blogObjects.map(blog => blog.save());
   await Promise.all(promiseArray);
+
+  const passwordHash = await bcrypt.hash('secret', 10)
+  const user = new User({ username: 'root', name: 'user', passwordHash })
+
+  await user.save();
 })
 
 test('all blogs are returned', async () => {
@@ -39,8 +47,18 @@ test('a valid blog can be added', async () => {
     likes: 12345,
   }
 
+  const loginResponse = await api
+    .post('/api/login')
+    .send({
+      username: 'root',
+      password: 'secret'
+    })
+
+  const token = loginResponse.body.token;
+
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/);
@@ -54,6 +72,20 @@ test('a valid blog can be added', async () => {
   );
 });
 
+test('not providing a token when creating a blog results in status code 401', async () => {
+  const newBlog = {
+    title: 'Testing is hard',
+    author: 'Koala Bear',
+    url: 'http://www.google.com',
+    likes: 12345,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+});
+
 test('if the likes property is missing from a request, it will default to 0', async () => {
   const newBlog = {
     title: 'Testing is hard',
@@ -61,8 +93,18 @@ test('if the likes property is missing from a request, it will default to 0', as
     url: 'http://www.google.com',
   }
 
+  const loginResponse = await api
+    .post('/api/login')
+    .send({
+      username: 'root',
+      password: 'secret'
+    })
+
+  const token = loginResponse.body.token;
+
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/);
@@ -85,28 +127,62 @@ test('if the title or url properties are missing, status code 400 is returned', 
     author: 'Koala Bear',
   }
 
+  const loginResponse = await api
+    .post('/api/login')
+    .send({
+      username: 'root',
+      password: 'secret'
+    })
+
+  const token = loginResponse.body.token;
+
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(blogNoTitle)
     .expect(400)
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(blogNoUrl)
     .expect(400)
 })
 
 test('a note with a valid id is deleted', async () => {
+  const newBlog = {
+    title: 'Testing is hard',
+    author: 'Koala Bear',
+    url: 'http://www.google.com',
+    likes: 12345,
+  }
+
+  const loginResponse = await api
+    .post('/api/login')
+    .send({
+      username: 'root',
+      password: 'secret'
+    })
+
+  const token = loginResponse.body.token;
+
+  const createdBlog = await api
+    .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
   const blogsAtStart = await api.get('/api/blogs');
-  const idOfBlogToDelete = blogsAtStart.body[0].id
 
   await api
-    .delete(`/api/blogs/${idOfBlogToDelete}`)
+    .delete(`/api/blogs/${createdBlog.body.id}`)
+    .set('Authorization', `bearer ${token}`)
     .expect(204)
 
   const blogsAtEnd = await api.get('/api/blogs');
   const idsOfBlogsAtEnd = blogsAtEnd.body.map(blog => blog.id);
-  expect(idsOfBlogsAtEnd).not.toContain(idOfBlogToDelete);
+  expect(idsOfBlogsAtEnd).not.toContain(createdBlog.body.id);
 })
 
 test('a note is properly updated', async () => {
