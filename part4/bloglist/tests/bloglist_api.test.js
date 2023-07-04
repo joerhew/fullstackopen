@@ -173,8 +173,6 @@ test('a note with a valid id is deleted', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/);
 
-  const blogsAtStart = await api.get('/api/blogs');
-
   await api
     .delete(`/api/blogs/${createdBlog.body.id}`)
     .set('Authorization', `bearer ${token}`)
