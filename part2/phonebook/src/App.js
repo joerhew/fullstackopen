@@ -36,8 +36,8 @@ const App = () => {
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson));
             setMessage({text: `Updated ${returnedPerson.name}'s phone number to ${returnedPerson.number}.`, type: 'success' }) //Set notification message    
           })
-          .catch(() => {
-            setMessage({text: `Error: ${personToUpdate.name} has already been deleted.`, type: 'error'}) //Set notification message
+          .catch(error => {
+            setMessage({text: `Error: ${error.response.data.error}`, type: 'error'}) //Set notification message
           });
       }
     } else {
@@ -49,6 +49,9 @@ const App = () => {
           setNewPhone(''); //Set phone input to blank
           setSearchName(''); //Set search input to blank
           setMessage({text: `Added ${returnedPerson.name} to the phonebook.`, type: 'success' }) //Set notification message    
+        })
+        .catch(error => {
+          setMessage({text: `Error: ${error.response.data.error}`, type: 'error'}) //Set notification message
         })
     };
   }
@@ -73,8 +76,8 @@ const App = () => {
     : persons;
 
   const removePerson = (event) => {
-    const idToDelete = Number(event.target.id);
-    const nameToDelete = persons.find(person => person.id === idToDelete).name
+    const idToDelete = event.target.id;
+    const nameToDelete = event.target.getAttribute('data-name');
     if (window.confirm(`Delete ${nameToDelete}?`)) {
       personServices
         .remove(event.target.id)
