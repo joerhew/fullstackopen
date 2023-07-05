@@ -2,7 +2,7 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const Login = ({ user, setUser }) => {
+const Login = ({ user, setUser, showNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,14 +14,23 @@ const Login = ({ user, setUser }) => {
         username, password
       })
 
+      const message = `Welcome back, ${user.name}!`
+      const type = 'success'
+
       setUser(user);
       window.localStorage.setItem('loggedInUser', JSON.stringify(user));
       setUsername('');
       setPassword('');
       blogService.setToken(user.token);
       
+      
+      showNotification(message, type);
+      
     } catch (exception) {
-      console.log('Wrong credentials');
+      const message = `Wrong credentials. Please check your username and password.`
+      const type = 'error'
+
+      showNotification(message, type);
     }
   }
 
@@ -33,6 +42,7 @@ const Login = ({ user, setUser }) => {
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
+        username: 
         <input 
           type="text"
           name="username"
@@ -41,8 +51,9 @@ const Login = ({ user, setUser }) => {
         />
       </div>
       <div>
+        password:
         <input 
-          type="text"
+          type="password"
           name="password"
           value={password}
           onChange={({ target }) => setPassword(target.value)}
