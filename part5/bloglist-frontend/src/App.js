@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
+
 import BlogEntry from './components/BlogEntry'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Login from './components/Login'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
+import userService from './services/users'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )  
   }, [])
 
@@ -47,15 +50,17 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={notification.message} type={notification.type}/>
-      <Login setUser={setUser} user={user} showNotification={showNotification} />
+      <LoginForm setUser={setUser} user={user} showNotification={showNotification} />
       {user && 
-        <div>
-          <h2>create new</h2>
-          <BlogForm setUser={setUser} user={user} addBlog={addBlog} />
-        </div>
+        <Togglable showButtonLabel='add new blog' hideButtonLabel="cancel">
+          <div>
+            <h2>create new</h2>
+            <BlogForm setUser={setUser} user={user} addBlog={addBlog} />
+          </div>
+        </Togglable>
       }
       {user && blogs.map(blog =>
-        <BlogEntry key={blog.id} blog={blog} />
+          <BlogEntry key={blog.id} blog={blog} />
       )}
     </div>
   )

@@ -25,7 +25,8 @@ blogsRouter.post('/', async (request, response) => {
 
   if (body.title && body.url) {
     const blog = new Blog(body)
-    const savedBlog = await blog.save();
+    let savedBlog = await blog.save();
+    savedBlog = await savedBlog.populate('user', { username: 1 })
 
     user.blogs = user.blogs.concat(savedBlog.id);
     await user.save();
@@ -41,9 +42,6 @@ blogsRouter.delete('/:id', async (request, response) => {
   const blogToDelete = await Blog.findById(id);
 
   const user = request.user;
-  console.log(user);
-  console.log('id',user.id);
-  console.log(('_id',user._id));
 
   if (!user) {
     return response.status(400).json({ error: 'need to supply a valid token with the request' });

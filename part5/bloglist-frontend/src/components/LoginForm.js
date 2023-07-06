@@ -2,7 +2,7 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const Login = ({ user, setUser, showNotification }) => {
+const LoginForm = ({ user, setUser, showNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -76,4 +76,4 @@ const Login = ({ user, setUser, showNotification }) => {
   )
 }
 
-export default Login
+export default LoginForm
