@@ -1,12 +1,21 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const BlogEntry = ({blog}) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const BlogEntry = ({ blog, loggedInUser, handleLike, handleDelete }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
 
-  const showWhenExpanded = {display: isExpanded ? '' : 'none'}
-  const hideWhenExpanded = {display: isExpanded ? 'none' : ''}
-  
-  const toggleExpansion = () => setIsExpanded(!isExpanded);
+  const showWhenExpanded = { display: isExpanded ? '' : 'none' }
+  const hideWhenExpanded = { display: isExpanded ? 'none' : '' }
+
+  const toggleExpansion = () => setIsExpanded(!isExpanded)
+
+  const like = () => {
+    handleLike(blog.id)
+  }
+
+  const deleteBlog = () => {
+    handleDelete(blog.id)
+  }
 
   const blogEntryStyle = {
     backgroundColor: 'lightgray',
@@ -24,8 +33,6 @@ const BlogEntry = ({blog}) => {
     marginBottom: '1rem'
   }
 
-  console.log(blog);
-
   return (
     <div style={blogEntryStyle}>
       <div style={titleStyle}>
@@ -37,17 +44,28 @@ const BlogEntry = ({blog}) => {
           URL: {blog.url} <br />
           User: {blog.user.username} <br />
           Likes: {blog.likes}
-          <button>Like</button>
+          <button onClick={like}>Like</button>
         </div>
         <div>
           <button onClick={toggleExpansion}>Collapse</button>
+          {loggedInUser.id === blog.user.id &&
+            <button onClick={deleteBlog}>Delete</button>
+          }
         </div>
       </div>
       <div style={hideWhenExpanded}>
         <button onClick={toggleExpansion}>Expand</button>
       </div>
-    </div>  
+    </div>
   )
+}
+
+BlogEntry.propTypes = {
+  key: PropTypes.string.isRequired,
+  blog: PropTypes.string.isRequired,
+  loggedInUser: PropTypes.string.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
 }
 
 export default BlogEntry
