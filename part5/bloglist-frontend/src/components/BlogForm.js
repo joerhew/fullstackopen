@@ -1,26 +1,26 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = ({ user, setUser, addBlog }) => {
-  const [newBlogTitle, setNewBlogTitle] = useState('');
-  const [newBlogAuthor, setNewBlogAuthor] = useState('');
-  const [newBlogUrl, setNewBlogUrl] = useState('');
+const BlogForm = ({ user, addBlog }) => {
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
 
   const handleNewBlog = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const newBlog = await blogService.create({ 
+    const newBlog = await blogService.create({
       title: newBlogTitle,
       author: newBlogAuthor,
       url: newBlogUrl,
       user: user.id
     })
 
-    addBlog(newBlog);
+    addBlog(newBlog)
 
-    setNewBlogTitle('');
-    setNewBlogAuthor('');
-    setNewBlogUrl('');
+    setNewBlogTitle('')
+    setNewBlogAuthor('')
+    setNewBlogUrl('')
 
   }
 
@@ -28,31 +28,37 @@ const BlogForm = ({ user, setUser, addBlog }) => {
     <div>
       <form onSubmit={handleNewBlog}>
         <div>
-          title 
-          <input
-            type="text"
-            name="newBlogTitle"
-            value={newBlogTitle}
-            onChange={({ target }) => setNewBlogTitle(target.value)}
-          />
+          <label>
+            title
+            <input
+              type="text"
+              name="newBlogTitle"
+              value={newBlogTitle}
+              onChange={({ target }) => setNewBlogTitle(target.value)}
+            />
+          </label>
         </div>
         <div>
-          author 
-          <input
-            type="text"
-            name="newBlogAuthor"
-            value={newBlogAuthor}
-            onChange={({ target }) => setNewBlogAuthor(target.value)}
-          />
+          <label>
+            author
+            <input
+              type="text"
+              name="newBlogAuthor"
+              value={newBlogAuthor}
+              onChange={({ target }) => setNewBlogAuthor(target.value)}
+            />
+          </label>
         </div>
         <div>
-          url 
-          <input
-            type="text"
-            name="newBlogUrl"
-            value={newBlogUrl}
-            onChange={({ target }) => setNewBlogUrl(target.value)}
-          />
+          <label>
+            url
+            <input
+              type="text"
+              name="newBlogUrl"
+              value={newBlogUrl}
+              onChange={({ target }) => setNewBlogUrl(target.value)}
+            />
+          </label>
         </div>
         <button type='submit'>create</button>
       </form>
@@ -60,4 +66,4 @@ const BlogForm = ({ user, setUser, addBlog }) => {
   )
 }
 
-export default BlogForm;
+export default BlogForm

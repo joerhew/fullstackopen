@@ -1,11 +1,11 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 console.log('blogs.js is updated')
-let token = null;
+let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
-  console.log(token);
+  console.log(token)
 }
 
 const getAll = async () => {
@@ -18,25 +18,24 @@ const create = async newObject => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(baseUrl, newObject, config);
-  return response.data;
+  const response = await axios.post(baseUrl, newObject, config)
+  return response.data
 }
 
 const update = async (id, updatedObject) => {
   const url = baseUrl + '/' + id
   const response = await axios.put(url, updatedObject)
-  return response.data;
+  return response.data
 }
 
 const remove = async (id) => {
   const config = {
     headers: { Authorization: token },
   }
-  
+
   const url = baseUrl + '/' + id
   const response = await axios.delete(url, config)
-  return response.data;
+  return response.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { setToken, getAll, create, update, remove }

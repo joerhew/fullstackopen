@@ -3,11 +3,11 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 
 const LoginForm = ({ user, setUser, showNotification }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
       const user = await loginService.login({
@@ -17,34 +17,34 @@ const LoginForm = ({ user, setUser, showNotification }) => {
       const message = `Welcome back, ${user.name}!`
       const type = 'success'
 
-      setUser(user);
-      window.localStorage.setItem('loggedInUser', JSON.stringify(user));
-      setUsername('');
-      setPassword('');
-      console.log(user.token);
-      blogService.setToken(user.token);
-      
-      
-      showNotification(message, type);
-      
+      setUser(user)
+      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+      setUsername('')
+      setPassword('')
+      console.log(user.token)
+      blogService.setToken(user.token)
+
+
+      showNotification(message, type)
+
     } catch (exception) {
-      const message = `Wrong credentials. Please check your username and password.`
+      const message = 'Wrong credentials. Please check your username and password.'
       const type = 'error'
 
-      showNotification(message, type);
+      showNotification(message, type)
     }
   }
 
   const handleLogout = () => {
-    setUser(null);
-    window.localStorage.removeItem('loggedInUser');
+    setUser(null)
+    window.localStorage.removeItem('loggedInUser')
   }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
-        username: 
-        <input 
+        username:
+        <input
           type="text"
           name="username"
           value={username}
@@ -53,7 +53,7 @@ const LoginForm = ({ user, setUser, showNotification }) => {
       </div>
       <div>
         password:
-        <input 
+        <input
           type="password"
           name="password"
           value={password}
@@ -67,7 +67,7 @@ const LoginForm = ({ user, setUser, showNotification }) => {
   return (
     <div>
       {!user && loginForm()}
-      {user && 
+      {user &&
         <div>
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>Logout</button>

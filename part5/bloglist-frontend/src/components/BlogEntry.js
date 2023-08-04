@@ -38,17 +38,16 @@ const BlogEntry = ({ blog, loggedInUser, handleLike, handleDelete }) => {
       <div style={titleStyle}>
         {blog.title} <br />
       </div>
-      <div style={showWhenExpanded}>
+      Author: {blog.author} <br />
+      <div style={showWhenExpanded} className="togglableContent">
         <div style={contentStyle}>
-          Author: {blog.author} <br />
           URL: {blog.url} <br />
-          User: {blog.user.username} <br />
           Likes: {blog.likes}
           <button onClick={like}>Like</button>
         </div>
         <div>
           <button onClick={toggleExpansion}>Collapse</button>
-          {loggedInUser.id === blog.user.id &&
+          {loggedInUser && loggedInUser.id === blog.user.id &&
             <button onClick={deleteBlog}>Delete</button>
           }
         </div>
@@ -61,8 +60,7 @@ const BlogEntry = ({ blog, loggedInUser, handleLike, handleDelete }) => {
 }
 
 BlogEntry.propTypes = {
-  key: PropTypes.string.isRequired,
-  blog: PropTypes.string.isRequired,
+  blog: PropTypes.object.isRequired,
   loggedInUser: PropTypes.string.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired

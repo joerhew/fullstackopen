@@ -1,4 +1,4 @@
-const Notification = ({message, type}) => {
+const Notification = ({ message, type }) => {
   const successNotificationStyle = {
     border: '2px solid green',
     fontSize: '1.5rem',
@@ -12,7 +12,7 @@ const Notification = ({message, type}) => {
   }
 
   if (!message) {
-    return null;
+    return null
   }
 
   return (
