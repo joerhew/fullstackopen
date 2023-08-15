@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "axios": "^1.2.3",
-    "eslint-plugin-jest": "^27.2.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -15,12 +14,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -48,6 +47,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "babel-jest": "^29.6.2"
+    "babel-jest": "^29.6.2",
+    "cypress": "^12.17.3",
+    "eslint-plugin-jest": "^26.9.0"
   }
 }

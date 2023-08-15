@@ -60,7 +60,7 @@ const BlogForm = ({ user, addBlog }) => {
             />
           </label>
         </div>
-        <button type='submit'>create</button>
+        <button id='createBlog' type='submit'>create</button>
       </form>
     </div>
   )
