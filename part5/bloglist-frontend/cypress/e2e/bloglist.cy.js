@@ -71,4 +71,41 @@ describe('Bloglist app', function() {
         .and('have.css', 'border-style', 'solid')
     })
   })
+
+  describe('When a user has created a blog', function() {
+    beforeEach(function() {
+      const user = {
+        name: 'Maud Rhew',
+        username: 'maud',
+        password: 'rhew'
+      }
+      cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+
+      cy.login({ username: 'maud', password: 'rhew' })
+        .then(() => {
+          return cy.createBlog({
+            title: 'cypress',
+            author: 'Beatrice',
+            url: 'www.beatrice.co'
+          })
+        })
+    })
+
+    it('A user can like a blog', function() {
+      cy.contains('Expand').click()
+      cy.contains('Like').click()
+
+      cy.get('html')
+        .should('contain', 'Likes: ')
+        .and('contain', '1')
+    })
+
+    it('The user who created  the blog can delete it', function() {
+      cy.contains('Expand').click()
+      cy.contains('Delete').click()
+
+      cy.get('html')
+        .should('not.contain', 'Beatrice')
+    })
+  })
 })

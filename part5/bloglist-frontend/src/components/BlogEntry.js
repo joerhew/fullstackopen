@@ -61,7 +61,7 @@ const BlogEntry = ({ blog, loggedInUser, handleLike, handleDelete }) => {
 
 BlogEntry.propTypes = {
   blog: PropTypes.object.isRequired,
-  loggedInUser: PropTypes.string.isRequired,
+  loggedInUser: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired
 }
