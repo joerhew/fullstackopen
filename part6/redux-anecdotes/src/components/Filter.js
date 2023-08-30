@@ -1,11 +1,11 @@
 import { useDispatch } from 'react-redux'
-import { filterChange } from '../reducers/filterReducer'
+import { setFilter } from '../reducers/filterReducer'
 
 const Filter = () => {
   const dispatch = useDispatch()
 
   const handleChange = ({ target }) => {
-    dispatch(filterChange(target.value))
+    dispatch(setFilter(target.value))
   }
 
   return (
