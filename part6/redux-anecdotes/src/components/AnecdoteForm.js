@@ -1,6 +1,6 @@
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { useDispatch } from 'react-redux'
-import { showTimedNotification } from '../reducers/notificationReducer'
+import { setTimedNotification } from '../reducers/notificationReducer'
 import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
@@ -14,7 +14,7 @@ const AnecdoteForm = () => {
     dispatch(createAnecdote(content))
 
     const msg = 'you created'
-    dispatch(showTimedNotification(`${msg} "${content}"`))
+    dispatch(setTimedNotification(`${msg} "${content}"`, 10))
   }
 
   return (
