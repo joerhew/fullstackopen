@@ -74,12 +74,19 @@ describe('Bloglist app', function() {
 
   describe('When a user has created a blog', function() {
     beforeEach(function() {
-      const user = {
+      const firstUser = {
         name: 'Maud Rhew',
         username: 'maud',
         password: 'rhew'
       }
-      cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+      cy.request('POST', `${Cypress.env('BACKEND')}/users/`, firstUser)
+
+      const secondUser = {
+        name: 'Felix Rhew',
+        username: 'felix',
+        password: 'rhew'
+      }
+      cy.request('POST', `${Cypress.env('BACKEND')}/users/`, secondUser)
 
       cy.login({ username: 'maud', password: 'rhew' })
         .then(() => {
@@ -100,12 +107,89 @@ describe('Bloglist app', function() {
         .and('contain', '1')
     })
 
-    it('The user who created  the blog can delete it', function() {
+    it('The user who created the blog can delete it', function() {
       cy.contains('Expand').click()
       cy.contains('Delete').click()
 
       cy.get('html')
         .should('not.contain', 'Beatrice')
+    })
+
+    it('A user who did not create the blog cannot delete it', function() {
+      cy.contains('Logout').click()
+      cy.login({ username: 'felix', password: 'rhew' })
+      cy.contains('Expand').click()
+
+      cy.get('html')
+        .should('not.contain','Delete')
+    })
+
+    it.only('Blogs should be ordered by the number of likes', function() {
+      cy.createBlog({
+        title: 'one likes',
+        author: 'one',
+        url: 'www.one.com'
+      })
+
+      cy.createBlog({
+        title: 'two likes',
+        author: 'two',
+        url: 'www.two.com'
+      })
+
+      cy.createBlog({
+        title: 'three likes',
+        author: 'three',
+        url: 'www.three.com'
+      })
+
+      cy.contains('three').parent().contains('Expand').click()
+      cy.contains('three').parent().contains('Like').click()
+      cy.contains('three').parent().contains('Collapse').click()
+
+      cy.contains('two').parent().contains('Expand').click()
+      cy.contains('two').parent().contains('Like').click()
+      cy.contains('two').parent().contains('Collapse').click()
+
+      cy.contains('one').parent().contains('Expand').click()
+      cy.contains('one').parent().contains('Like').click()
+      cy.contains('one').parent().contains('Collapse').click()
+
+      cy.contains('three').parent().contains('Expand').click()
+      cy.contains('three').parent().contains('Like').click()
+      cy.contains('three').parent().contains('Collapse').click()
+
+      cy.contains('two').parent().contains('Expand').click()
+      cy.contains('two').parent().contains('Like').click()
+      cy.contains('two').parent().contains('Collapse').click()
+
+      cy.contains('three').parent().contains('Expand').click()
+      cy.contains('three').parent().contains('Like').click()
+      cy.contains('three').parent().contains('Collapse').click()
+
+      cy.get('.blogEntry').eq(0)
+        .should('contain','three likes')
+        .and('not.contain','two likes')
+        .and('not.contain','one likes')
+        .and('not.contain','cypress')
+
+      cy.get('.blogEntry').eq(1)
+        .should('not.contain','three likes')
+        .and('contain','two likes')
+        .and('not.contain','one likes')
+        .and('not.contain','cypress')
+
+      cy.get('.blogEntry').eq(2)
+        .should('not.contain','three likes')
+        .and('not.contain','two likes')
+        .and('contain','one likes')
+        .and('not.contain','cypress')
+
+      cy.get('.blogEntry').eq(3)
+        .should('not.contain','three likes')
+        .and('not.contain','two likes')
+        .and('not.contain','one likes')
+        .and('contain','cypress')
     })
   })
 })

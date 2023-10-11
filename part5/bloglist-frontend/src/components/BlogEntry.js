@@ -34,7 +34,7 @@ const BlogEntry = ({ blog, loggedInUser, handleLike, handleDelete }) => {
   }
 
   return (
-    <div style={blogEntryStyle}>
+    <div className="blogEntry" style={blogEntryStyle}>
       <div style={titleStyle}>
         {blog.title} <br />
       </div>
@@ -43,7 +43,7 @@ const BlogEntry = ({ blog, loggedInUser, handleLike, handleDelete }) => {
         <div style={contentStyle}>
           URL: {blog.url} <br />
           Likes: {blog.likes}
-          <button onClick={like}>Like</button>
+          <button className="likeButton" onClick={like}>Like</button>
         </div>
         <div>
           <button onClick={toggleExpansion}>Collapse</button>

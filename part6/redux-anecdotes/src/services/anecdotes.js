@@ -9,7 +9,7 @@ const getAll = async () => {
 
 const get = async (anecdote) => {
   const response = await axios.get(`${baseUrl}/${anecdote.id}`)
-  console.log(response)
+  
   return response.data
 }
 
@@ -24,7 +24,6 @@ const createNew = async (content) => {
 
 const vote = async (anecdote) => {
   const oldAnecdote = await get(anecdote)
-  console.log(anecdote)
 
   const newAnecdote = {
     ...oldAnecdote,
